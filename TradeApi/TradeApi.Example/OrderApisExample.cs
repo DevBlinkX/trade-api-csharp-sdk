@@ -3,6 +3,8 @@ using TradeApi.Model.Brokerage;
 using TradeApi.Model.OrderBook;
 using TradeApi.Model.OrderDetails;
 using TradeApi.Model.OrderHistory;
+using TradeApi.Model.TradeBook;
+using Newtonsoft.Json;
 
 namespace TradeApi.Example
 {
@@ -82,8 +84,8 @@ namespace TradeApi.Example
 
 
 
-        }*/
-
+        }
+*/
         /*public async Task exitOrder()
         {
             ExitOrderBody body = new ExitOrderBody()
@@ -106,48 +108,100 @@ namespace TradeApi.Example
 
         }*/
 
-        /*public async Task tradeOrder()
+        public async Task tradeOrder()
         {
             TradeBookResponse response = new TradeBookResponse();
-            Console.WriteLine("Message received: " + response.ToString());
-        }*/
+            string formattedResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
+
+            Console.WriteLine("Message received: " + formattedResponse);
+        }
 
         public async Task orderBook()
         {
-            OrderBookResponse response = new OrderBookResponse();
-            Console.WriteLine("Message received: " + response.ToString());
-        }
-
-        public async Task orderDetails()
-        {
-            OrderDetailsBody body = new OrderDetailsBody()
-
+            try
             {
-                OrdId = "240710000000030"
+                // Call the API to get the order book
+                OrderBookResponse response = await OrdersApis.OrderBookAsync();
 
-            };
-
-            OrderDetailsResponse response = await OrdersApis.OrderDetailsAsync(body);
-            Console.WriteLine("Message received: " + response.Message);
-
-        }
-
-        public async Task orderHistory()
-        {
-            OrderHistoryBody body = new OrderHistoryBody()
-
+                if (response != null)
+                {
+                    // Serialize the full response to JSON with indentation
+                    string jsonResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
+                    Console.WriteLine("Full Response:");
+                    Console.WriteLine(jsonResponse);
+                }
+                else
+                {
+                    Console.WriteLine("Failed to retrieve order book.");
+                }
+            }
+            catch (Exception ex)
             {
-
-                OrdId = "240703000000313"
-
-            };
-
-            OrderHistoryResponse response = await OrdersApis.OrderHistoryAsync(body);
-            Console.WriteLine("Message received: " + response.ToString());
-
+                // Log or handle errors gracefully
+                Console.WriteLine("An error occurred while fetching the order book:");
+                Console.WriteLine(ex.Message);
+            }
         }
 
-        public async Task brokerage()
+
+
+
+        public async Task OrderDetails()
+        {
+            try
+            {
+                // Create the request body
+                OrderDetailsBody body = new OrderDetailsBody
+                {
+                    OrdId = "240710000000030"
+                };
+
+                // Fetch the response from the API
+                OrderDetailsResponse response = await OrdersApis.OrderDetailsAsync(body);
+
+                if (response != null)
+                {
+                    // Serialize the response to a JSON string with indentation
+                    string jsonResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
+
+                    // Print the entire JSON response to the console
+                    Console.WriteLine("Order Details Response:");
+                    Console.WriteLine(jsonResponse);
+                }
+                else
+                {
+                    Console.WriteLine("Failed to retrieve order details.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle and log any errors
+                Console.WriteLine("An error occurred while fetching order details:");
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+
+     
+    public async Task OrderHistory()
+    {
+        OrderHistoryBody body = new OrderHistoryBody
+        {
+            OrdId = "240703000000313"
+        };
+
+        // Call the API and get the response
+        OrderHistoryResponse response = await OrdersApis.OrderHistoryAsync(body);
+
+        // Convert the response object to a formatted JSON string
+        string formattedResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
+
+        // Print the formatted JSON string to the console
+        Console.WriteLine("Message received: " + formattedResponse);
+    }
+
+
+    public async Task brokerage()
         {
             BrokerageBody body = new BrokerageBody()
 
@@ -166,7 +220,9 @@ namespace TradeApi.Example
             };
 
             BrokerageResponse response = await MarketDataApis.BrokerageAsync(body);
-            Console.WriteLine("Message received: " + response.InfoMsg);
+            string formattedResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
+
+            Console.WriteLine("Message received: " + formattedResponse);
 
         }
 

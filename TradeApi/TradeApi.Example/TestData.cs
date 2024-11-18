@@ -10,11 +10,13 @@
     // **************************************************************************
     internal class TestData
     {
-        public const string ApiKey = "iGIKrsy8fdJUM";
-        public const string Baseurl = "https://dapix.blinkx.in.";
+        public const string ApiKey = "SmFOBOjh4M5OYkL";
+        public const string Baseurl = "https:n";
 
-        public const string UserId = "DBG";
-        public const string Password = "Hello";
-        public const string Mobile = "9000000000";
+        public const string UserId = "101";
+        public const string Password = "A2";
+        public const string Mobile = "689809883";
+
+        
     }
 }

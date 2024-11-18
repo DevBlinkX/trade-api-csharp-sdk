@@ -2,6 +2,9 @@
 using TradeApi.Model.GetFunds;
 using TradeApi.Model.GetProfile;
 using TradeApi.Model.Login;
+using TradeApi.Model.TradeDetails;
+
+using Newtonsoft.Json;
 
 namespace TradeApi.Example
 {
@@ -18,50 +21,105 @@ namespace TradeApi.Example
 
             LoginResponse response = await UserApis.LoginUserAsync(body);
 
-            Console.WriteLine("Message received: " + response.InfoId);
+            Console.WriteLine("Message received11111111: " + response.Data);
 
         }
 
-        public async Task getProfile()
+        public async Task GetProfile()
         {
             GetProfileBody body = new GetProfileBody
             {
-                data = new GetProfileBodyData(), // Initialize with an empty object or populate as needed
-                appID = "1"
+                data = new GetProfileBodyData(),
+                appID = "acb372f3621e4c6ca6473b2b65a3d806"
             };
+
+            // Assuming GetProfileAsync is the method making the API call
             GetProfileResponse response = await UserApis.GetProfileAsync(body);
-            Console.WriteLine("Message received: " + response.ToString);
 
+            // Serialize the response to JSON string
+            string jsonResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
 
+            // Print the formatted response
+            Console.WriteLine("Profile Response: " + jsonResponse);
         }
 
         public async Task getFunds()
         {
-            GetFundsResponse response = await UserApis.GetFundsAsync();
+            try
+            {
+                // Call the API to get the funds response
+                GetFundsResponse response = await UserApis.GetFundsAsync();
 
-            Console.WriteLine("Message received PositionBookResponse: " + response.infoid);
+                if (response != null)
+                {
+                    // Serialize the full response to JSON with indentation
+                    string jsonResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
+
+                    // Print the entire response to the console
+                    Console.WriteLine("Full Response:");
+                    Console.WriteLine(jsonResponse);
+                }
+                else
+                {
+                    Console.WriteLine("Failed to retrieve funds information.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle any errors
+                Console.WriteLine("An error occurred while fetching funds data:");
+                Console.WriteLine(ex.Message);
+            }
         }
+
 
         /* public async Task placeHoldings()
         {
             HoldingsResponse response = await PortfolioApis.HoldingsAsync();
 
             Console.WriteLine("Message received placeHoldings: " + response.InfoMsg);
+        }*/
+
+
+
+        public async Task TradeDetails()
+        {
+            try
+            {
+                // Create the request body
+                TradeDetailsBody body = new TradeDetailsBody
+                {
+                    OrdId = "240703000000314"
+                };
+
+                // Call the API to get the trade details response
+                TradeDetailsResponse response = await OrdersApis.TradeDetailsAsync(body);
+
+                if (response != null)
+                {
+                    // Serialize the full response to JSON with indentation
+                    string jsonResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
+
+                    // Print the entire response to the console
+                    Console.WriteLine("Full Response:");
+                    Console.WriteLine(jsonResponse);
+                }
+                else
+                {
+                    Console.WriteLine("Failed to retrieve trade details.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle any errors
+                Console.WriteLine("An error occurred while fetching trade details:");
+                Console.WriteLine(ex.Message);
+
+                // Optionally, log the stack trace for deeper debugging
+                Console.WriteLine(ex.StackTrace);
+            }
         }
 
-        public async Task tradeDetails()
-        {
-
-            TradeDetailsBody body = new()
-            {
-                OrdId = "240703000000314"
-            };
-
-
-            TradeDetailsResponse response = await OrdersApis.TradeDetailsAsync(body);
-
-            Console.WriteLine("Message received tradeDetails: " + response.Data);
-        }*/
 
         /* public async Task positionBook()
          {

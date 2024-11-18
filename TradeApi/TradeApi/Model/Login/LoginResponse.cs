@@ -4,18 +4,22 @@ namespace TradeApi.Model.Login
 {
     public class LoginResponse
     {
-
-        [JsonProperty("infoId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("infoID", NullValueHandling = NullValueHandling.Ignore)]
         public string InfoId { get; set; }
 
         [JsonProperty("infoMsg", NullValueHandling = NullValueHandling.Ignore)]
         public string InfoMsg { get; set; }
 
         [JsonProperty("timestamp", NullValueHandling = NullValueHandling.Ignore)]
-        public string Timestamp { get; set; }
+        public long Timestamp { get; set; }
 
         [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
         public LoginResponseData Data { get; set; }
+
+        public override string ToString()
+        {
+            return $"InfoId: {InfoId}, InfoMsg: {InfoMsg}, Timestamp: {Timestamp}, Data: {Data?.ToString() ?? "null"}";
+        }
 
         public class LoginResponseData
         {
@@ -25,24 +29,20 @@ namespace TradeApi.Model.Login
             [JsonProperty("refreshToken", NullValueHandling = NullValueHandling.Ignore)]
             public string RefreshToken { get; set; }
 
-            [JsonProperty("expiryTime", NullValueHandling = NullValueHandling.Ignore)]
-            public string ExpiryTime { get; set; }
+            [JsonProperty("tokenExpiry", NullValueHandling = NullValueHandling.Ignore)]
+            public string TokenExpiry { get; set; }
 
-            [JsonProperty("ddpi", NullValueHandling = NullValueHandling.Ignore)]
-            public string Ddpi { get; set; }
+            [JsonProperty("userName", NullValueHandling = NullValueHandling.Ignore)]
+            public string UserName { get; set; }
 
-            [JsonProperty("poaFlag", NullValueHandling = NullValueHandling.Ignore)]
-            public string PoaFlag { get; set; }
+            [JsonProperty("appId", NullValueHandling = NullValueHandling.Ignore)]
+            public string AppId { get; set; }
 
-            [JsonProperty("intellectJwtToken", NullValueHandling = NullValueHandling.Ignore)]
-            public string IntellectJwtToken { get; set; }
-
-            [JsonProperty("mobileNumber", NullValueHandling = NullValueHandling.Ignore)]
-            public string MobileNumber { get; set; }
-
-            [JsonProperty("mpinEnabled", NullValueHandling = NullValueHandling.Ignore)]
-            public string MpinEnabled { get; set; }
+            public override string ToString()
+            {
+                return $"AccessToken: {AccessToken}, RefreshToken: {RefreshToken}, TokenExpiry: {TokenExpiry}, " +
+                       $"UserName: {UserName}, AppId: {AppId}";
+            }
         }
-
     }
 }

@@ -1,62 +1,150 @@
-﻿namespace TradeApi.Model.GetProfile
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+
+namespace TradeApi.Model.GetProfile
 {
     public class GetProfileResponseAddress
     {
-        public string zip { get; set; }
-        public string address3 { get; set; }
-        public string address2 { get; set; }
-        public string city { get; set; }
-        public string nation { get; set; }
-        public string address1 { get; set; }
-        public string state { get; set; }
+        [JsonProperty("zip")]
+        public string Zip { get; set; }
+
+        [JsonProperty("address3")]
+        public string Address3 { get; set; }
+
+        [JsonProperty("address2")]
+        public string Address2 { get; set; }
+
+        [JsonProperty("city")]
+        public string City { get; set; }
+
+        [JsonProperty("nation")]
+        public string Nation { get; set; }
+
+        [JsonProperty("address1")]
+        public string Address1 { get; set; }
+
+        [JsonProperty("state")]
+        public string State { get; set; }
     }
+
     public class GetProfileResponseBankAccount
     {
-        public bool defaultBank { get; set; }
-        public string accNo { get; set; }
-        public object chequeName { get; set; }
-        public string bankName { get; set; }
-        public string accType { get; set; }
-        public object micrCode { get; set; }
-        public string ifscCode { get; set; }
+        [JsonProperty("defaultBank")]
+        public bool DefaultBank { get; set; }
+
+        [JsonProperty("accNo")]
+        public string AccNo { get; set; }
+
+        [JsonProperty("chequeName")]
+        public object ChequeName { get; set; }
+
+        [JsonProperty("bankName")]
+        public string BankName { get; set; }
+
+        [JsonProperty("accType")]
+        public string AccType { get; set; }
+
+        [JsonProperty("micrCode")]
+        public object MicrCode { get; set; }
+
+        [JsonProperty("ifscCode")]
+        public string IfscCode { get; set; }
     }
+
     public class GetProfileResponseData
     {
-        public object upcomingPlan { get; set; }
-        public GetProfileResponseProfile profile { get; set; }
+        [JsonProperty("upcomingPlan")]
+        public object UpcomingPlan { get; set; }
+
+        [JsonProperty("profile")]
+        public GetProfileResponseProfile Profile { get; set; }
     }
+
     public class GetProfileResponseProfile
     {
-        public List<GetProfileResponseAddress> addresses { get; set; }
-        public string gender { get; set; }
-        public object turnOverBrokerageSaving { get; set; }
-        public string dpid { get; set; }
-        public List<GetProfileResponseBankAccount> bankAccounts { get; set; }
-        public bool premiumPlanRenewed { get; set; }
-        public object offerType { get; set; }
-        public bool poaFlag { get; set; }
-        public object inActiveFrom { get; set; }
-        public string segment { get; set; }
-        public string pan { get; set; }
-        public object planEndDate { get; set; }
-        public string email { get; set; }
-        public object activeFrom { get; set; }
-        public object planActualPrice { get; set; }
-        public object planType { get; set; }
-        public string address { get; set; }
-        public string mobile { get; set; }
-        public bool ddpiFlag { get; set; }
-        public string clientCode { get; set; }
-        public string dob { get; set; }
-        public string name { get; set; }
-        public bool showOfferPrice { get; set; }
-        public object repositoryType { get; set; }
-        public object planStartDate { get; set; }
-        public bool premiumPlanActive { get; set; }
+        [JsonProperty("addresses")]
+        public List<GetProfileResponseAddress> Addresses { get; set; }
+
+        [JsonProperty("gender")]
+        public string Gender { get; set; }
+
+        [JsonProperty("turnOverBrokerageSaving")]
+        public object TurnOverBrokerageSaving { get; set; }
+
+        [JsonProperty("dpid")]
+        public string Dpid { get; set; }
+
+        [JsonProperty("bankAccounts")]
+        public List<GetProfileResponseBankAccount> BankAccounts { get; set; }
+
+        [JsonProperty("premiumPlanRenewed")]
+        public bool PremiumPlanRenewed { get; set; }
+
+        [JsonProperty("offerType")]
+        public object OfferType { get; set; }
+
+        [JsonProperty("poaFlag")]
+        public bool PoaFlag { get; set; }
+
+        [JsonProperty("inActiveFrom")]
+        public object InActiveFrom { get; set; }
+
+        [JsonProperty("segment")]
+        public string Segment { get; set; }
+
+        [JsonProperty("pan")]
+        public string Pan { get; set; }
+
+        [JsonProperty("planEndDate")]
+        public object PlanEndDate { get; set; }
+
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
+        [JsonProperty("activeFrom")]
+        public object ActiveFrom { get; set; }
+
+        [JsonProperty("planActualPrice")]
+        public object PlanActualPrice { get; set; }
+
+        [JsonProperty("planType")]
+        public object PlanType { get; set; }
+
+        [JsonProperty("mobile")]
+        public string Mobile { get; set; }
+
+        [JsonProperty("ddpiFlag")]
+        public bool DdpiFlag { get; set; }
+
+        [JsonProperty("clientCode")]
+        public string ClientCode { get; set; }
+
+        [JsonProperty("dob")]
+        public string Dob { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("showOfferPrice")]
+        public bool ShowOfferPrice { get; set; }
+
+        [JsonProperty("repositoryType")]
+        public object RepositoryType { get; set; }
+
+        [JsonProperty("planStartDate")]
+        public object PlanStartDate { get; set; }
+
+        [JsonProperty("premiumPlanActive")]
+        public bool PremiumPlanActive { get; set; }
     }
+
     public class GetProfileResponse
     {
-        public string infoID { get; set; }
-        public GetProfileResponseData data { get; set; }
+        [JsonProperty("infoID")]
+        public string InfoID { get; set; }
+
+        [JsonProperty("data")]
+        public GetProfileResponseData Data { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace TradeApi.Constants
         //userapis
         public const string Login = "/auth-services/api/auth/v1/login";
         public const string Logout = "/auth-services/api/auth/v1/logout";
-        public const string GetProfile = "/wrapper-details-service/api/user/v1/getProfile";
+        public const string GetProfile = "/wrapper-details-service/api/user/v1/get-profile";
         public const string GetFunds = "/wrapper-details-service/api/funds/v1/get-funds";
 
         //orderapis

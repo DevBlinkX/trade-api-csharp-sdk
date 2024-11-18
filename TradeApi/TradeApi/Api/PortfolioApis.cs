@@ -17,10 +17,10 @@ namespace TradeApi.Api
             return await Communicator.PostAsync<ConvertPositionBody, ConvertPositionResponse>(EndPoints.ConvertPosition, body);
         }
 
-        public static async Task<HoldingsResponse> HoldingsAsync()
+       /* public static async Task<HoldingsResponse> HoldingsAsync()
         {
             return await Communicator.GetAsync<HoldingsResponse>(EndPoints.Holdings);
-        }
+        }*/
 
         public static async Task<ReportResponse> ReportAsync(ReportBody body)
         {

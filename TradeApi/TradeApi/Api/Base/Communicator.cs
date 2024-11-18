@@ -4,74 +4,80 @@ using System.Net.Http.Json;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
-
 namespace TradeApi.Api.Base
 {
-
-    /// <summary>
-    /// Class <c>Communicator</c> handles the POST and GET http calls.
-    /// </summary>
     internal class Communicator
     {
-        /// <summary>
-        /// <c>PostAsync</c> makes POST call, <paramref name="body"/> to the <paramref name="endPoint"/>.
-        /// <typeparamref name="B"/> is the type of Request Body object.
-        /// <typeparamref name="T"/> is the type of Response Body object.
-        /// <paramref name="queryParams"/> is optional. Frame it properly, without query mark (?). Example: ut_src=abcd&ut_val=efgh
-        /// <paramref name="ignoreAuthToken"/> is optional. It indicates whether to add AuthToken to headers or not. 
-        /// Example: For Login Api, AuthToken should not be sent. So, for Login Api, ignoreAuthToken value should be sent as true.
-        /// </summary>
+        // public static async Task<T> PostAsync<B, T>(string endPoint, B body, string? queryParams = null, bool ignoreAuthToken = false)
         public static async Task<T> PostAsync<B, T>(string endPoint, B body, string? queryParams = null, bool ignoreAuthToken = false)
         {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Clear();
-
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            if (!ignoreAuthToken)
+            using (HttpClient client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("authorization", "Bearer " + Core.Configuration.AuthToken);
-            }
-            client.DefaultRequestHeaders.Add("api-key", Core.Configuration.ApiKey);
+                // Clear existing headers and set JSON headers
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            string url = Core.Configuration.BaseUrl + endPoint;
-            if (queryParams != null)
-            {
-                url += "?" + queryParams;
-            }
+                // Optionally add authorization header
+                if (!ignoreAuthToken)
+                {
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + Core.Configuration.AuthToken);
+                }
+                client.DefaultRequestHeaders.Add("api-key", Core.Configuration.ApiKey);
 
-            HttpResponseMessage response = await client.PostAsJsonAsync(url, body);
+                // Construct URL with optional query parameters
+                string url = Core.Configuration.BaseUrl + endPoint;
+                if (queryParams != null)
+                {
+                    url += "?" + queryParams;
+                }
 
-            if (response.IsSuccessStatusCode)
-            {
-                string resp = await response.Content.ReadAsStringAsync();
                 try
                 {
-                    return JsonConvert.DeserializeObject<T>(resp);
+                    // Make the POST request
+                    HttpResponseMessage response = await client.PostAsJsonAsync(url, body);
+
+                    // Check if the response is successful
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Deserialize and return the response
+                        string resp = await response.Content.ReadAsStringAsync();
+                        return JsonConvert.DeserializeObject<T>(resp) ?? throw new Exception("Null response data");
+                    }
+                    else
+                    {
+                        // Handle different status codes with detailed messages
+                        string errorContent = await response.Content.ReadAsStringAsync();
+                        switch (response.StatusCode)
+                        {
+                            case HttpStatusCode.NotFound:
+                                throw new Exception($"Resource not found at {url}");
+                            case HttpStatusCode.Unauthorized:
+                                throw new Exception("Unauthorized access. Please check AuthToken and ApiKey. " + errorContent);
+                            case HttpStatusCode.Forbidden:
+                                throw new Exception("Access forbidden. " + errorContent);
+                            default:
+                                throw new Exception($"Request failed with status {response.StatusCode}. Details: {errorContent}");
+                        }
+                    }
+                }
+                catch (JsonSerializationException jsonEx)
+                {
+                    throw new Exception("Error deserializing response: " + jsonEx.Message);
+                }
+                catch (HttpRequestException httpEx)
+                {
+                    
+                    throw new Exception("HTTP request failed: " + httpEx.Message);
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Invalid Response received");
+                    throw new Exception("An error occurred during POST request: " + ex.Message);
                 }
             }
-            else if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new Exception("Resource not found");
-            }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                throw new Exception("Unauthorized. Please check AuthToken and ApiKey.");
-            }
-            else if (response.StatusCode == HttpStatusCode.Forbidden)
-            {
-                throw new Exception("Forbidden. Please check AuthToken and ApiKey.");
-            }
-            else
-            {
-                throw new Exception("Server didn't respond with success status. Status Code: " + response.StatusCode + ".");
-            }
         }
-        
+
+
+
         /// <summary>
         /// <c>GetAsync</c> makes GET call, to the <paramref name="endPoint"/>.
         /// <typeparamref name="T"/> is the type of Response Body object.
@@ -133,3 +139,6 @@ namespace TradeApi.Api.Base
 
     }
 }
+
+
+

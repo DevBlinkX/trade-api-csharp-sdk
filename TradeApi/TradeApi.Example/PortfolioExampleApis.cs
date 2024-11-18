@@ -31,7 +31,7 @@ namespace TradeApi.Example
             };
 
             ConvertPositionResponse response = await PortfolioApis.ConvertPositionAsync(body);
-            Console.WriteLine("Message received: " + response.ToString());
+            Console.WriteLine("Message received: " + response);
 
         }
         public async Task report()
